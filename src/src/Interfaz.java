@@ -1,6 +1,7 @@
 package src;
 
 public interface Interfaz {
+
 	void setControlador(Controlador c);
 	void start();
 	

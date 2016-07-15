@@ -23,7 +23,6 @@ public class Vista extends JFrame implements Interfaz{
 	/**
 	 * Create the application.
 	 */
-	
 	public Vista() {
 		super("Mi aplicaciOn");
 		setBounds(100,100,800,600);
