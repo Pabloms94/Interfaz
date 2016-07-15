@@ -49,7 +49,6 @@ public class Controlador implements ActionListener {
 			
 		}else
 			vista.writeData("ERROR");
-		
 	}
 
 }
