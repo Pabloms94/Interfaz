@@ -2,11 +2,13 @@ package src;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Controlador implements ActionListener {
+public class Controlador implements ActionListener, WindowStateListener{
 	private Interfaz vista;
 	private Modelo modelo;
 
@@ -25,7 +27,7 @@ public class Controlador implements ActionListener {
 			
 			Runtime rt = Runtime.getRuntime();
 			try {
-				Process pr = rt.exec(new String[]{"../integralesV2/build/a.exe",String.valueOf(data[0]),String.valueOf(data[1]),String.valueOf(data[2]),String.valueOf(data[3]),String.valueOf(data[4])});
+				Process pr = rt.exec(new String[]{"a.exe",String.valueOf(data[0]),String.valueOf(data[1]),String.valueOf(data[2]),String.valueOf(data[3]),String.valueOf(data[4])});
 				
 	            BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 	            
@@ -49,6 +51,13 @@ public class Controlador implements ActionListener {
 			
 		}else
 			vista.writeData("ERROR");
+		
+	}
+
+	@Override
+	public void windowStateChanged(WindowEvent arg0) {
+
+        vista.writeData("WindowStateListener method called: windowStateChanged." + arg0);
 		
 	}
 
