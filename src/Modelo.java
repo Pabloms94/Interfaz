@@ -6,10 +6,10 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class Modelo {
 
-	public double[] valor;
-	public String[] options;
-	public XYDataset dataset1;
-	public int numElem;
+	private double[] valor; //valores recogidos de la interfaz
+	private String[] options;
+	private XYDataset dataset1;
+	private int numElem;
 	double []X = null;
 	double []Y = null;
 	XYSeriesCollection collection = new XYSeriesCollection();
@@ -84,7 +84,7 @@ public class Modelo {
 				yNew[i] = Double.parseDouble(tok[i]);
 
 			for(int i = 0; i < numElem; i++){
-				Y[i] = (Y[i] * Math.exp ( (interpolar1D(X[i], xNew, yNew, numElem))* Double.parseDouble(options[1]) * (-1)));
+				Y[i] = (Y[i] * Math.exp ( (interpolar1DLogLog(X[i], xNew, yNew, numElem))* Double.parseDouble(options[1]) * (-1)));
 				series.addOrUpdate(X[i], Y[i]);
 			}
 			//collection.addSeries(series);
@@ -95,6 +95,7 @@ public class Modelo {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 	public double interpolar1D(double x, double[]Xa, double []Ya, int lit){
@@ -110,6 +111,23 @@ public class Modelo {
 		y2 = Ya[i+1];
 		
 		r = ((x - Xa[i]) / (Xa[i + 1] - Xa[i])) * (y2 - y1) + y1;
+
+		return r;
+	}
+	
+	public double interpolar1DLogLog(double x, double[]Xa, double []Ya, int lit){
+		double r = 0, y1, y2;
+		int i;
+
+		for (i = 0; i < lit; i++){
+			if ((Xa[i] <= x) && (x <= Xa[i+1]))
+				break;
+		}
+		
+		y1 = Ya[i];
+		y2 = Ya[i+1];
+		
+		r = Math.exp(((Math.log(x) - Math.log(Xa[i])) / (Math.log(Xa[i + 1]) - Math.log(Xa[i]))) * (Math.log(y2) - Math.log(y1)) + Math.log(y1));
 
 		return r;
 	}

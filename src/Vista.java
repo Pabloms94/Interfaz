@@ -1,19 +1,27 @@
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+
 import java.awt.Font;
 import java.awt.Window;
 import java.awt.BorderLayout;
+import java.awt.Color;
+
 import javax.swing.SwingConstants;
 
 import org.jfree.chart.ChartFactory;
@@ -27,6 +35,7 @@ import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JComboBox;
 
 public class Vista extends JFrame implements Interfaz{
@@ -37,6 +46,14 @@ public class Vista extends JFrame implements Interfaz{
 	private JTextField e_min;
 	private JTextField e_intervalo;
 	private JLabel lblResultado;
+	
+	JMenuBar menu = new JMenuBar();
+	JMenu programa = new JMenu("Programa");
+	JMenu ayuda = new JMenu ("Ayuda");
+	JMenuItem exportar = new JMenuItem("Exportar");
+	JMenuItem salir = new JMenuItem("Salir");
+	JMenuItem ayudaGral = new JMenuItem ("Ayuda General");
+	JMenuItem acercaDe = new JMenuItem ("Acerca de...");
 	
 	private JTabbedPane tabs;
 	private JPanel panel1 = new JPanel();
@@ -49,9 +66,25 @@ public class Vista extends JFrame implements Interfaz{
 	 * Create the application.
 	 */
 	public Vista() {
-		super("Mi aplicaciOn");
+		super("X-prectra");
 		setBounds(100,100,800,600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ImageIcon img = new ImageIcon("icon.png");
+		setIconImage(img.getImage());
+		
+		setJMenuBar(menu);
+		menu.add(programa);
+		menu.add(ayuda);
+		programa.add(exportar);
+		programa.addSeparator();
+		programa.add(salir);
+		ayuda.add(ayudaGral);
+		ayuda.add(acercaDe);
+		exportar.setActionCommand("exportar");
+		salir.setActionCommand("salir");
+		ayudaGral.setActionCommand("ayudaGral");
+		acercaDe.setActionCommand("acercaDe");
+		exportar.setEnabled(false);
 		
 		tabs = new JTabbedPane();
 		tabs.addTab("Datos", panel1);
@@ -69,7 +102,7 @@ public class Vista extends JFrame implements Interfaz{
 		gbl_panel2.columnWidths = new int[]{200, 577};
 		gbl_panel2.rowHeights = new int[]{125,50,50,50,50,50,125};
 		gbl_panel2.columnWeights = new double[]{0,Double.MIN_VALUE};
-		gbl_panel2.rowWeights = new double[]{0,0,0,0,0};
+		gbl_panel2.rowWeights = new double[]{Double.MIN_VALUE,0,0,0,0,0,Double.MIN_VALUE};
 		panel2.setLayout(gbl_panel2);
 		
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -96,7 +129,7 @@ public class Vista extends JFrame implements Interfaz{
 		panel1.add(lblE0, constraints1);
 		
 		GridBagConstraints constraints2 = new GridBagConstraints();
-		JLabel lblEmin = new JLabel("E_min (primer valor para calcular)");
+		JLabel lblEmin = new JLabel("E_min");
 		lblEmin.setHorizontalAlignment(SwingConstants.CENTER);
 		constraints2.fill = GridBagConstraints.BOTH;
 		constraints2.gridx = 1;
@@ -107,6 +140,9 @@ public class Vista extends JFrame implements Interfaz{
 		
 		GridBagConstraints constraints3 = new GridBagConstraints();
 		e0 = new JTextField();
+		e0.setHorizontalAlignment(SwingConstants.CENTER);
+		e0.setText("100");
+		constraints3.insets = new Insets(0, 10, 0, 10);
 		constraints3.fill = GridBagConstraints.HORIZONTAL;
 		constraints3.gridx = 0;
 		constraints3.gridy = 3;
@@ -116,6 +152,9 @@ public class Vista extends JFrame implements Interfaz{
 		
 		GridBagConstraints constraints4 = new GridBagConstraints();
 		e_min = new JTextField();
+		e_min.setHorizontalAlignment(SwingConstants.CENTER);
+		e_min.setText("5");
+		constraints4.insets = new Insets(0, 10, 0, 10);
 		constraints4.fill = GridBagConstraints.HORIZONTAL;
 		constraints4.gridx = 1;
 		constraints4.gridy = 3;
@@ -134,7 +173,7 @@ public class Vista extends JFrame implements Interfaz{
 		panel1.add(lblTheta, constraints5);
 		
 		GridBagConstraints constraints6 = new GridBagConstraints();
-		JLabel lblEinterval = new JLabel("E_intervalo(intervalo recorrido E_min - E_0)");
+		JLabel lblEinterval = new JLabel("E_intervalo");
 		lblEinterval.setHorizontalAlignment(SwingConstants.CENTER);
 		constraints6.fill = GridBagConstraints.BOTH;
 		constraints6.insets = new Insets(0, 0, 5, 0);
@@ -146,6 +185,9 @@ public class Vista extends JFrame implements Interfaz{
 		
 		GridBagConstraints constraints7 = new GridBagConstraints();
 		theta = new JTextField();
+		theta.setText("0");
+		theta.setHorizontalAlignment(SwingConstants.CENTER);
+		constraints7.insets = new Insets(0, 10, 0, 10);
 		constraints7.fill = GridBagConstraints.HORIZONTAL;
 		constraints7.gridx = 0;
 		constraints7.gridy = 5;
@@ -155,6 +197,9 @@ public class Vista extends JFrame implements Interfaz{
 		
 		GridBagConstraints constraints8 = new GridBagConstraints();
 		e_intervalo = new JTextField();
+		e_intervalo.setText("5");
+		e_intervalo.setHorizontalAlignment(SwingConstants.CENTER);
+		constraints8.insets = new Insets(0, 10, 0, 10);
 		constraints8.fill = GridBagConstraints.HORIZONTAL;
 		constraints8.gridx = 1;
 		constraints8.gridy = 5;
@@ -174,6 +219,9 @@ public class Vista extends JFrame implements Interfaz{
 		
 		GridBagConstraints constraints10 = new GridBagConstraints();
 		phi = new JTextField();
+		phi.setText("12");
+		phi.setHorizontalAlignment(SwingConstants.CENTER);
+		constraints10.insets = new Insets(0, 10, 0, 10);
 		constraints10.fill = GridBagConstraints.HORIZONTAL;
 		constraints10.gridx = 0;
 		constraints10.gridy = 7;
@@ -267,8 +315,10 @@ public class Vista extends JFrame implements Interfaz{
 	public void setControlador(Controlador c){
 		btnOk.addActionListener(c);
 		btnAtenuar.addActionListener(c);
-
-		
+		exportar.addActionListener(c);
+		salir.addActionListener(c);
+		ayudaGral.addActionListener(c);
+		acercaDe.addActionListener(c);
 	}
 	
 	public void start(){
@@ -296,6 +346,7 @@ public class Vista extends JFrame implements Interfaz{
 		textField.setEnabled(true);
 		btnAtenuar.setEnabled(true);
 		
+		exportar.setEnabled(true);
 		tabs.setSelectedIndex(1);
 	}
 	
@@ -306,6 +357,39 @@ public class Vista extends JFrame implements Interfaz{
 		options[1] = textField.getText();
 
 		return options;
-		
+	}
+	
+	public void showHelp(){
+		String longMessage = "X-pectra implementa modelos de fuentes de rayos X.\n"
+			    + "La primera pestaña nos permite introducir datos:\n"
+			    + "\tE0: \n"
+			    + "\tTheta: \n"
+			    + "\tPhi: \n"
+			    + "\tE_min: será el primer valor para el que se calculará la función.\n"
+			    + "\tE_intervalo: se recorrerá desde E_min hasta E0 en intervalos de la cantidad indicada en este campo.\n\n"
+			    + "La segunda pestaña será la que nos represente gráficamente los resultados.\n"
+				+ "Podremos atenuar los resultados seleccionando el archivo mu y un valor de atenuación deseados.\n\n"
+			    + "Si queremos exportar los datos a un fichero .csv podremos hacerlo desde el menú programa, y la opción exportar.\n";
+		JTextArea textArea = new JTextArea(15,40);
+		textArea.setText(longMessage);
+	    textArea.setEditable(false);
+		JScrollPane scrollPane = new JScrollPane(textArea);
+		JOptionPane.showMessageDialog(tabs, scrollPane);
+	}
+	
+	public void showAbout(){
+		String longMessage = "X-pectra es un TFG que implementa modelos de fuentes de rayos X.\n"
+			    + "Su autor es: \n"
+				+ "\tPablo Martín Sánchez\n"
+			    + "Sus tutores son: \n"
+			    + "\tGuillermo Hernández\n"
+			    + "\tMaría Belén Pérez Lancho\n"
+			    + "Universidad de Salamanca\n"
+			    + "2015-2016";
+		JTextArea textArea = new JTextArea(15,40);
+		textArea.setText(longMessage);
+	    textArea.setEditable(false);
+		JScrollPane scrollPane = new JScrollPane(textArea);
+		JOptionPane.showMessageDialog(tabs, scrollPane);
 	}
 }

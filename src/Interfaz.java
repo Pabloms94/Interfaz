@@ -11,4 +11,6 @@ public interface Interfaz {
 	void writeData(String s);
 	
 	void graphics(XYDataset dataset1);
+	void showHelp();
+	void showAbout();
 }

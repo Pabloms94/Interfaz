@@ -7,6 +7,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -39,7 +45,7 @@ public class Controlador implements ActionListener{
 			
 			Runtime rt = Runtime.getRuntime();
 			try {
-				Process pr = rt.exec(new String[]{"a.exe",String.valueOf(data[0]),String.valueOf(data[1]),String.valueOf(data[2]),String.valueOf(data[3]),String.valueOf(data[4])});
+				Process pr = rt.exec(new String[]{"xpectraC.exe",String.valueOf(data[0]),String.valueOf(data[1]),String.valueOf(data[2]),String.valueOf(data[3]),String.valueOf(data[4])});
 				
 	            BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 	            
@@ -75,6 +81,35 @@ public class Controlador implements ActionListener{
         	modelo.Atenuar();
         	
         	vista.graphics(modelo.getDataset1());        	
+		}else if (arg0.getActionCommand().equals("exportar")){
+			StringBuilder coordX = new StringBuilder();
+			StringBuilder coordY = new StringBuilder();
+			
+			for (int i = 0; i< modelo.getNumElem(); i++){				
+				coordX.append(String.valueOf(modelo.X[i]));
+				coordY.append(String.valueOf(modelo.Y[i]));
+				if (i < modelo.getNumElem()-1){
+					coordX.append(",");
+					coordY.append(",");
+				}
+			}
+			
+			String finalX = coordX.toString();
+			String finalY = coordY.toString();
+			
+			List<String> lines = Arrays.asList(finalX, finalY);
+			Path file = Paths.get("Resultados.csv");
+			try {
+				Files.write(file, lines, Charset.forName("UTF-8"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else if (arg0.getActionCommand().equals("ayudaGral")){
+			vista.showHelp();
+		}else if (arg0.getActionCommand().equals("acercaDe")){
+			vista.showAbout();
+		}else if (arg0.getActionCommand().equals("salir")){
+			System.exit(0);
 		}else
 			vista.writeData("ERROR");
 		
