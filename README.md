@@ -4,6 +4,7 @@ Programa en lenguaje Java que complementa al programa en C y que representa mode
 ##Preparación
 * Necesitaremos descargar el directorio src, el cual contiene todos los ficheros fuente.
 * La carpeta lib, que contiene las librerías externas utilizadas.
+* La imagen icon.png es la que se usará como logo, por lo que habrá que descargarla para que la aplicación la pueda mostrar.
 * Y el makefile, archivo con el cual compilaremos nuestro programa.
 
 ##Requisitos del sistema
@@ -17,6 +18,12 @@ No es necesario ningún requisito especial.
   1. En la carpeta llamada XpectraJ colocaremos todo el contenido nombrado anteriormente en la sección de preparación.
   1. En la carteta XpectraC introduciremos toda la parte de los cálculos en C, situada en el repositorio "TFG".
 
+![Screenshot](/Images/1.png)
+
+- - - -
+
+![Screenshot](/Images/2.png)
+
 2. Hecho ésto, podemos ejecutar el comando make desde nuestra terminal situada en el directorio ../X-pectra/XpectraJ. De esta manera se nos creará automáticamente una carpeta llamada build que contendrá todos los objetos creados de tipo class. El mismo makefile ejecuta la aplicación.
 
 3. Se abrirá la ventana principal de la aplicación y nos pedirá los 5 argumentos necesarios para su funcionamiento (podemos dejar los que vienen por defecto):
@@ -26,10 +33,20 @@ No es necesario ningún requisito especial.
   * Ey: valor mínimo del intervalo donde calcularemos el espectro.
   * Intervalo: unidades que separarán un valor de X del siguiente.
   Si lo hacemos correctamente, cambiará automáticamente de pestaña y nos mostrará los resultados calculados gráficamente.
-  
+
+![Screenshot](/Images/3.png)
+
+- - - - 
+
+![Screenshot](/Images/4.png)
+
 4. Si buscamos cambiar dichos resultados con una cierta atenuación, podemos hacerlo gracias al menú desplegable y el textField. Con ellos elegimos el material que deseamos atravesar y la distancia o ancho del mismo (en cm).
 
+![Screenshot](/Images/6.png)
+
 5. El programa es capaz de exportar los resultados actuales a un fichero .csv, para trabajar con ellos en Excel, por ejemplo.
+
+![Screenshot](/Images/2.png)
 
 6. La aplicación cuenta también con ayuda, donde se explican los parámetros y funcionalidad.
 
