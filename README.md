@@ -42,11 +42,11 @@ No es necesario ningún requisito especial.
 
 * Si buscamos cambiar dichos resultados con una cierta atenuación, podemos hacerlo gracias al menú desplegable y el textField. Con ellos elegimos el material que deseamos atravesar y la distancia o ancho del mismo (en cm).
 
-![Screenshot](/Images/6.png)
+![Screenshot](/Images/5.png)
 
 * El programa es capaz de exportar los resultados actuales a un fichero .csv, para trabajar con ellos en Excel, por ejemplo.
 
-![Screenshot](/Images/2.png)
+![Screenshot](/Images/6.png)
 
 * La aplicación cuenta también con ayuda, donde se explican los parámetros y funcionalidad.
 
