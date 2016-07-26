@@ -32,7 +32,7 @@ No es necesario ningún requisito especial.
   3. Phi: ángulo en grados.
   4. Ey: valor mínimo del intervalo donde calcularemos el espectro.
   5. Intervalo: unidades que separarán un valor de X del siguiente.
-  Si lo hacemos correctamente, cambiará automáticamente de pestaña y nos mostrará los resultados calculados gráficamente.
+* Si lo hacemos correctamente, cambiará automáticamente de pestaña y nos mostrará los resultados calculados gráficamente.
 
 ![Screenshot](/Images/3.png)
 
