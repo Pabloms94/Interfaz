@@ -11,12 +11,12 @@ Programa en lenguaje Java que complementa al programa en C y que representa mode
 No es necesario ningún requisito especial.
 
 ##Instalación
-* Crearemos una carpeta que podemos llamar X-pectra, si no lo hemos hecho ya, por ejemplo. Aquí reuniremos todo lo necesario para el funcionamiento completo de la aplicación. El nombre no es importante.
-  1. En ella tendremos que crear 2 carpetas: 
-    * Una para la parte de C. La llamaremos XpectraC.
-    * La otra para la parte de Java, en la que estamos. La llamaremos XpectraJ.
-    1. En la carpeta llamada XpectraJ colocaremos todo el contenido nombrado anteriormente en la sección de preparación.
-    1. En la carteta XpectraC introduciremos toda la parte de los cálculos en C, situada en el repositorio "TFG".
+* Crearemos una carpeta que podemos llamar X-pectra, si no lo hemos hecho ya, por ejemplo. Aquí reuniremos todo lo necesario para el funcionamiento completo de la aplicación. El nombre no es importante. En ella tendremos que crear 2 carpetas:
+  1. Una para la parte de C. La llamaremos XpectraC.
+  2. La otra para la parte de Java, en la que estamos. La llamaremos XpectraJ.
+    
+* En la carpeta llamada XpectraJ colocaremos todo el contenido nombrado anteriormente en la sección de preparación.
+* En la carteta XpectraC introduciremos toda la parte de los cálculos en C, situada en el repositorio "TFG".
 
 ![Screenshot](/Images/1.png)
 
