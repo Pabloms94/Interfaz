@@ -4,6 +4,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,6 +15,9 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -82,26 +86,29 @@ public class Controlador implements ActionListener{
         	
         	vista.graphics(modelo.getDataset1());        	
 		}else if (arg0.getActionCommand().equals("exportar")){
-			StringBuilder coordX = new StringBuilder();
-			StringBuilder coordY = new StringBuilder();
-			
-			for (int i = 0; i< modelo.getNumElem(); i++){				
-				coordX.append(String.valueOf(modelo.X[i]));
-				coordY.append(String.valueOf(modelo.Y[i]));
-				if (i < modelo.getNumElem()-1){
-					coordX.append(",");
-					coordY.append(",");
-				}
-			}
-			
-			String finalX = coordX.toString();
-			String finalY = coordY.toString();
-			
-			List<String> lines = Arrays.asList(finalX, finalY);
-			Path file = Paths.get("Resultados.csv");
 			try {
-				Files.write(file, lines, Charset.forName("UTF-8"));
+				FileOutputStream fos = new FileOutputStream("Resultado.xls");
+				HSSFWorkbook wb = new HSSFWorkbook();
+				HSSFSheet sheet = wb.createSheet("Primera hoja");
+				
+				HSSFRow rowhead = sheet.createRow((short)0);
+				rowhead.createCell(0).setCellValue("X");
+				rowhead.createCell(1).setCellValue("Y");
+				
+				for(int i = 0; i < modelo.getNumElem(); i++){
+					HSSFRow row = sheet.createRow((short)i);
+					row.createCell(0).setCellValue(modelo.X[i]);
+					row.createCell(1).setCellValue(modelo.Y[i]);
+				}
+				
+				wb.write(fos);
+				fos.close();
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else if (arg0.getActionCommand().equals("ayudaGral")){
