@@ -20,7 +20,9 @@ default: classes
 
 classes: $(CLASSES:.java=.class)
 
-run: classes
-	java -cp build Main
+jar: classes
+	jar -cvfm Xpectra.jar manifest.mf $(BUILDDIR)/*.class
 
 clean: $(RM) build/*.class
+
+.PHONY: jar
