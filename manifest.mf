@@ -1,2 +1,2 @@
-Main-Class: build.Main
+Main-Class: Main
 Class-Path: lib/gson-2.6.2.jar lib/jcommon.1.0.23.jar lib/jfreechart-1.0.19.jar

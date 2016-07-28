@@ -1,4 +1,4 @@
-JFLAGS = -g -d build/ -cp "lib/*"
+JFLAGS = -g -d $(BUILDDIR) -cp "$(LIBDIR)/*" -encoding ISO-8859-1
 JC = javac
 
 SOURCEDIR = src
@@ -11,18 +11,23 @@ CLASSPATH = $(LIBDIR)/jcommon-1.0.23.jar gson-2.6.2.jar jfreechart-1.0.19.jar
 
 CLASSES = $(SOURCEDIR)/Controlador.java $(SOURCEDIR)/Interfaz.java $(SOURCEDIR)/Main.java $(SOURCEDIR)/Modelo.java $(SOURCEDIR)/Vista.java 
 
-.java.class:
+.java.class: 
 	$(JC) $(JFLAGS) $(SOURCEDIR)/*.java
-
-#MAIN = Main
 	
 default: classes
 
-classes: $(CLASSES:.java=.class)
+classes: dir mf $(CLASSES:.java=.class) jar
 
+dir:
+	mkdir -p $(BUILDDIR)
+	
+mf:
+	cp -r manifest.mf $(BUILDDIR)
+	cp -r lib $(BUILDDIR)
+	
 jar: classes
-	jar -cvfm Xpectra.jar manifest.mf $(BUILDDIR)/*.class
+	cd $(BUILDDIR) && jar -cvfm Xpectra.jar manifest.mf *.class
 
 clean: $(RM) build/*.class
 
-.PHONY: jar
+.PHONY: jar dir mf
