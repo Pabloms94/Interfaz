@@ -131,4 +131,10 @@ public class Modelo {
 
 		return r;
 	}
+	
+	public void imprimir(){
+		for(int i = 0; i < numElem; i++){
+			System.out.println("X " + X[i] + " Y " +Y[i]);
+		}
+	}
 }

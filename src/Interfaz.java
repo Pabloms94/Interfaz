@@ -10,7 +10,10 @@ public interface Interfaz {
 
 	void writeData(String s);
 	
-	void graphics(XYDataset dataset1);
+	void graphics(XYDataset dataset1, String opt1, String opt2, int i);
 	void showHelp();
 	void showAbout();
+	
+	int getTarget();
+	void modificarLista(int i);
 }

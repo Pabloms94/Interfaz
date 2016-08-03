@@ -28,6 +28,8 @@ mf:
 jar: classes
 	cd $(BUILDDIR) && jar -cvfm Xpectra.jar manifest.mf *.class
 
-clean: $(RM) build/*.class
+clean: 
+	$(RM) build/*.class
 
-.PHONY: jar dir mf
+.PHONY: 
+	jar dir mf

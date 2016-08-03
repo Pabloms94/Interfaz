@@ -4,7 +4,8 @@ public class Main {
 
 		Modelo modelo = new Modelo();
 		Interfaz vista = new Vista();
-		Controlador controlador = new Controlador(vista, modelo);
+		ColeccionEspectros coleccion = new ColeccionEspectros();
+		Controlador controlador = new Controlador(vista, modelo, coleccion);
 		vista.setControlador(controlador);
 		
 		vista.start();

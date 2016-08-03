@@ -6,6 +6,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -13,6 +14,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -47,6 +49,8 @@ public class Vista extends JFrame implements Interfaz{
 	private JTextField e_intervalo;
 	private JLabel lblResultado;
 	
+	private boolean first = true;
+	
 	JMenuBar menu = new JMenuBar();
 	JMenu programa = new JMenu("Programa");
 	JMenu ayuda = new JMenu ("Ayuda");
@@ -59,14 +63,20 @@ public class Vista extends JFrame implements Interfaz{
 	private JPanel panel1 = new JPanel();
 	private JPanel panel2 = new JPanel();
 	
-	private JComboBox comboBox;
+	private JComboBox<String> comboBox;
 	private JTextField textField;
 	private JButton btnAtenuar;
+	
+	DefaultListModel<String> listaModelo = new DefaultListModel<>();
+	private JList<String> lista = new JList<>(listaModelo);
+	private JScrollPane jsp = new JScrollPane(lista);
+	private JButton btnRevertir;
+	
 	/**
 	 * Create the application.
 	 */
 	public Vista() {
-		super("X-prectra");
+		super("X-pectra");
 		setBounds(100,100,800,600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ImageIcon img = new ImageIcon("icon.png");
@@ -100,9 +110,9 @@ public class Vista extends JFrame implements Interfaz{
 		
 		GridBagLayout gbl_panel2 = new GridBagLayout();
 		gbl_panel2.columnWidths = new int[]{200, 577};
-		gbl_panel2.rowHeights = new int[]{125,50,50,50,50,50,125};
+		gbl_panel2.rowHeights = new int[]{200,50,50,50,50,50,50};
 		gbl_panel2.columnWeights = new double[]{0,Double.MIN_VALUE};
-		gbl_panel2.rowWeights = new double[]{Double.MIN_VALUE,0,0,0,0,0,Double.MIN_VALUE};
+		gbl_panel2.rowWeights = new double[]{Double.MIN_VALUE,0,0,0,0,0};
 		panel2.setLayout(gbl_panel2);
 		
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -251,44 +261,64 @@ public class Vista extends JFrame implements Interfaz{
 		panel1.add(btnOk, constraints12);
 
 		GridBagConstraints constraints13 = new GridBagConstraints();
+		constraints13.insets = new Insets(0, 0, 5, 0);
 		JLabel lbl = new JLabel("Elija:");
 		constraints13.gridx = 0;
-		constraints13.gridy = 1;
+		constraints13.gridy = 2;
 		panel2.add(lbl, constraints13);
 		
 		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[]{"------", "4.csv", "13.csv", "29.csv", "50.csv", "73.csv", "74.csv"}));
 		GridBagConstraints constraints14 = new GridBagConstraints();
-		constraints14.insets = new Insets(0, 10, 0, 10);
+		constraints14.insets = new Insets(0, 10, 5, 10);
 		constraints14.fill = GridBagConstraints.HORIZONTAL;
 		constraints14.gridx = 0;
-		constraints14.gridy = 2;
+		constraints14.gridy = 3;
 		comboBox.setEnabled(false);
 		panel2.add(comboBox, constraints14);
 		
 		JLabel lblEspesor = new JLabel("Espesor:");
 		GridBagConstraints constraints15 = new GridBagConstraints();
+		constraints15.insets = new Insets(0, 0, 5, 0);
 		constraints15.gridx = 0;
-		constraints15.gridy = 3;
+		constraints15.gridy = 4;
 		panel2.add(lblEspesor, constraints15);
 		
 		textField = new JTextField();
 		textField.setEnabled(false);
 		GridBagConstraints constraints16 = new GridBagConstraints();
-		constraints16.insets = new Insets(0, 10, 0, 10);
+		constraints16.insets = new Insets(0, 10, 5, 10);
 		constraints16.fill = GridBagConstraints.HORIZONTAL;
 		constraints16.gridx = 0;
-		constraints16.gridy = 4;
+		constraints16.gridy = 5;
 		panel2.add(textField, constraints16);
 		
 		btnAtenuar = new JButton("Atenuar");
 		btnAtenuar.setEnabled(false);
 		btnAtenuar.setActionCommand("ENTER2");
 		GridBagConstraints constraints17 = new GridBagConstraints();
+		constraints17.insets = new Insets(0, 0, 5, 0);
 		constraints17.fill = GridBagConstraints.CENTER;
 		constraints17.gridx = 0;
-		constraints17.gridy = 5;
+		constraints17.gridy = 6;
 		panel2.add(btnAtenuar, constraints17);
+		
+		GridBagConstraints constraints18 = new GridBagConstraints();
+		constraints18.insets = new Insets(0, 0, 5, 0);
+		constraints18.fill = GridBagConstraints.BOTH;
+		constraints18.gridx = 0;
+		constraints18.gridy = 0;
+		panel2.add(jsp, constraints18);
+		
+		btnRevertir = new JButton("Revertir a la seleccion");
+		btnRevertir.setEnabled(false);
+		btnRevertir.setActionCommand("REVERTIR");
+		GridBagConstraints constraints19 = new GridBagConstraints();
+		constraints19.insets = new Insets(0, 0, 5, 0);
+		constraints19.fill = GridBagConstraints.CENTER;
+		constraints19.gridx = 0;
+		constraints19.gridy = 1;
+		panel2.add(btnRevertir, constraints19);
 	}	
 
 	public double[] getData() {
@@ -319,6 +349,7 @@ public class Vista extends JFrame implements Interfaz{
 		salir.addActionListener(c);
 		ayudaGral.addActionListener(c);
 		acercaDe.addActionListener(c);
+		btnRevertir.addActionListener(c);
 	}
 	
 	public void start(){
@@ -326,7 +357,7 @@ public class Vista extends JFrame implements Interfaz{
 		setVisible(true);
 	}
 	
-	public void graphics(XYDataset dataset1){
+	public void graphics(XYDataset dataset1, String opt1, String opt2, int i){
 		JFreeChart chart = ChartFactory.createScatterPlot("Titulo", "X", "Y", dataset1);
 		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 		renderer.setDrawSeriesLineAsPath(true);
@@ -345,7 +376,15 @@ public class Vista extends JFrame implements Interfaz{
 		comboBox.setEnabled(true);
 		textField.setEnabled(true);
 		btnAtenuar.setEnabled(true);
+		btnRevertir.setEnabled(true);
 		
+		if(first)
+			listaModelo.addElement("Original");
+		else
+			listaModelo.addElement("Atenuado: " + opt2 + "cm de " + opt1);
+		
+		first=false;
+		lista.setSelectedIndex(i);
 		exportar.setEnabled(true);
 		tabs.setSelectedIndex(1);
 	}
@@ -391,5 +430,18 @@ public class Vista extends JFrame implements Interfaz{
 	    textArea.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		JOptionPane.showMessageDialog(tabs, scrollPane);
+	}
+	
+	public int getTarget(){
+		return lista.getSelectedIndex();
+	}
+	
+	public void modificarLista(int i){
+		int lim = listaModelo.size();
+		/*for (int j = i+1; j <= lim; j++)
+			listaModelo.remove(listaModelo.size()-1);*/
+		listaModelo.removeRange(i+1, lim-2);
+		listaModelo.remove(i+1);
+		lista.setSelectedIndex(i);
 	}
 }

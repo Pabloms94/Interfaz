@@ -29,14 +29,16 @@ import com.google.gson.JsonPrimitive;
 
 public class Controlador implements ActionListener{
 	private Interfaz vista;
-	private static Modelo modelo;
+	private static Modelo espectro;
+	private ColeccionEspectros coleccion;
 	static boolean first =true;
 	/*static XYSeriesCollection collection = new XYSeriesCollection();
 	static XYSeries series = new XYSeries("");*/
 	
-	public Controlador (Interfaz vista, Modelo modelo){
+	public Controlador (Interfaz vista, Modelo modelo, ColeccionEspectros coleccion){
 		this.vista = vista;
-		this.modelo = modelo;
+		this.espectro = modelo;
+		this.coleccion = coleccion;
 	}
 	
 	@Override
@@ -44,7 +46,7 @@ public class Controlador implements ActionListener{
 				
 		if (arg0.getActionCommand().equals("ENTER1")){
 			double []data = vista.getData();
-			modelo.setValor(data);
+			espectro.setValor(data);
 			vista.writeData("Me ha llegado: " + data[0] + " " + data[1] + " " + data[2] + " " + data[3] + " " + data[4]);
 			
 			Runtime rt = Runtime.getRuntime();
@@ -65,7 +67,7 @@ public class Controlador implements ActionListener{
 	            if(pr.exitValue() == 0){
 	            	try {
 	            		readData();
-	            		vista.graphics(modelo.getDataset1());
+	            		vista.graphics(coleccion.getDataset()," ", " ", 0);
 	            	} catch (FileNotFoundException e) {
 	            		e.printStackTrace();
 	            	}
@@ -80,11 +82,33 @@ public class Controlador implements ActionListener{
 			
 		}else if (arg0.getActionCommand().equals("ENTER2")){
         	String []options = vista.getOptions();
-        	modelo.setOptions(options);
+        	int index = coleccion.getIndice();
+        	if(options[0] != "------" && !options[1].isEmpty()){
+        		espectro.setOptions(options);
         	
-        	modelo.Atenuar();
+        		espectro.Atenuar();
         	
-        	vista.graphics(modelo.getDataset1());        	
+        		coleccion.setEspectro(espectro);
+        		vista.graphics(coleccion.getDataset(), options[0], options[1], index);  
+        	}
+        	
+        	
+		}else if (arg0.getActionCommand().equals("REVERTIR")){
+			int target = vista.getTarget();
+
+			if(coleccion.getIndice()-1 > target){
+				coleccion.revert(target);
+				String []options = coleccion.getOptions(target);
+        	
+				System.out.println("PINTAR TARGET " + target + " E INDICE " + coleccion.getIndice());
+				System.out.println("OPCIONES " + options[0] + " " + options[1]);
+				
+				vista.modificarLista(target);
+				espectro = coleccion.getEspectro(target);
+				espectro.imprimir();
+				vista.graphics(espectro.getDataset1(), options[0], options[1], target);  
+			}
+        	      	
 		}else if (arg0.getActionCommand().equals("exportar")){
 			try {
 				FileOutputStream fos = new FileOutputStream("Resultado.xls");
@@ -95,10 +119,12 @@ public class Controlador implements ActionListener{
 				rowhead.createCell(0).setCellValue("X");
 				rowhead.createCell(1).setCellValue("Y");
 				
-				for(int i = 0; i < modelo.getNumElem(); i++){
+				int target = vista.getTarget();
+				espectro = coleccion.getEspectro(target);
+				for(int i = 0; i < espectro.getNumElem(); i++){
 					HSSFRow row = sheet.createRow((short)i);
-					row.createCell(0).setCellValue(modelo.X[i]);
-					row.createCell(1).setCellValue(modelo.Y[i]);
+					row.createCell(0).setCellValue(espectro.X[i]);
+					row.createCell(1).setCellValue(espectro.Y[i]);
 				}
 				
 				wb.write(fos);
@@ -129,7 +155,8 @@ public class Controlador implements ActionListener{
 		
 		fr = new FileReader("y.json");
 		JsonElement datos2 = parser.parse(fr);
-		modelo.setDataset1(crearDataset(datos1, datos2));
+		espectro.setDataset1(crearDataset(datos1, datos2));
+		coleccion.setEspectro(espectro);
 	}
 	
 	public static XYDataset crearDataset (JsonElement datos1, JsonElement datos2){
@@ -137,7 +164,7 @@ public class Controlador implements ActionListener{
 		double []y = new double [500];
 		int i = 0;
 		
-		modelo.series.clear();
+		espectro.series.clear();
 		JsonArray array1 = datos1.getAsJsonArray();
         java.util.Iterator<JsonElement> iter1 = array1.iterator();
         JsonArray array2 = datos2.getAsJsonArray();
@@ -150,15 +177,15 @@ public class Controlador implements ActionListener{
     		entrada = iter2.next();
     		valor = entrada.getAsJsonPrimitive();
     		y[i] = valor.getAsDouble();
-    		modelo.series.addOrUpdate(x[i],y[i]);
+    		espectro.series.addOrUpdate(x[i],y[i]);
     		i++;
         }
-        modelo.setX(x);
-        modelo.setY(y);
-        modelo.setNumElem(i);
+        espectro.setX(x);
+        espectro.setY(y);
+        espectro.setNumElem(i);
         if(first)
-        	modelo.collection.addSeries(modelo.series);
+        	espectro.collection.addSeries(espectro.series);
         first = false;
-        return modelo.collection;
+        return espectro.collection;
 	}
 }
