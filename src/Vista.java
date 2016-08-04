@@ -267,8 +267,8 @@ public class Vista extends JFrame implements Interfaz{
 		constraints13.gridy = 2;
 		panel2.add(lbl, constraints13);
 		
-		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[]{"------", "4.csv", "13.csv", "29.csv", "50.csv", "73.csv", "74.csv"}));
+		comboBox = new JComboBox<String>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[]{"------", "4.csv", "13.csv", "29.csv", "50.csv", "73.csv", "74.csv"}));
 		GridBagConstraints constraints14 = new GridBagConstraints();
 		constraints14.insets = new Insets(0, 10, 5, 10);
 		constraints14.fill = GridBagConstraints.HORIZONTAL;
@@ -378,9 +378,15 @@ public class Vista extends JFrame implements Interfaz{
 		btnAtenuar.setEnabled(true);
 		btnRevertir.setEnabled(true);
 		
-		if(first)
+		if(opt1.isEmpty() && opt2.isEmpty()){
+			first =true;
+		}
+			
+		
+		if(first){
+			listaModelo.removeAllElements();
 			listaModelo.addElement("Original");
-		else
+		}else
 			listaModelo.addElement("Atenuado: " + opt2 + "cm de " + opt1);
 		
 		first=false;
@@ -438,10 +444,19 @@ public class Vista extends JFrame implements Interfaz{
 	
 	public void modificarLista(int i){
 		int lim = listaModelo.size();
-		/*for (int j = i+1; j <= lim; j++)
-			listaModelo.remove(listaModelo.size()-1);*/
-		listaModelo.removeRange(i+1, lim-2);
-		listaModelo.remove(i+1);
+
+		for (int j = i+1; j <= lim; j++){
+			listaModelo.remove(i+1);
+		}
 		lista.setSelectedIndex(i);
+	}
+	
+	public void setElementos(String[] cadena, int contador){
+		String[] mostrar = new String[contador];
+		
+		for(int i = 0; i<contador; i++)
+			mostrar[i] = cadena[i];
+		
+		comboBox.setModel(new DefaultComboBoxModel<String>(mostrar));
 	}
 }

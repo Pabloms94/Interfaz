@@ -3,6 +3,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -13,11 +15,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -32,6 +42,8 @@ public class Controlador implements ActionListener{
 	private static Modelo espectro;
 	private ColeccionEspectros coleccion;
 	static boolean first =true;
+
+	String[] cadena = new String[50];
 	/*static XYSeriesCollection collection = new XYSeriesCollection();
 	static XYSeries series = new XYSeries("");*/
 	
@@ -67,7 +79,9 @@ public class Controlador implements ActionListener{
 	            if(pr.exitValue() == 0){
 	            	try {
 	            		readData();
-	            		vista.graphics(coleccion.getDataset()," ", " ", 0);
+	            		int contador = readElementos();
+	            		vista.setElementos(cadena, contador);
+	            		vista.graphics(coleccion.getDataset(),"", "", 0);
 	            	} catch (FileNotFoundException e) {
 	            		e.printStackTrace();
 	            	}
@@ -82,14 +96,14 @@ public class Controlador implements ActionListener{
 			
 		}else if (arg0.getActionCommand().equals("ENTER2")){
         	String []options = vista.getOptions();
-        	int index = coleccion.getIndice();
+        	
         	if(options[0] != "------" && !options[1].isEmpty()){
         		espectro.setOptions(options);
         	
         		espectro.Atenuar();
         	
         		coleccion.setEspectro(espectro);
-        		vista.graphics(coleccion.getDataset(), options[0], options[1], index);  
+        		vista.graphics(coleccion.getDataset(), options[0], options[1], coleccion.getIndice()-1);  
         	}
         	
         	
@@ -111,20 +125,23 @@ public class Controlador implements ActionListener{
         	      	
 		}else if (arg0.getActionCommand().equals("exportar")){
 			try {
-				FileOutputStream fos = new FileOutputStream("Resultado.xls");
-				HSSFWorkbook wb = new HSSFWorkbook();
-				HSSFSheet sheet = wb.createSheet("Primera hoja");
+				FileOutputStream fos = new FileOutputStream("Resultado.xlsx");
+				XSSFWorkbook wb = new XSSFWorkbook();
+				XSSFSheet sheet = wb.createSheet("Primera hoja");
+		
+				int rowNum = sheet.getLastRowNum();
 				
-				HSSFRow rowhead = sheet.createRow((short)0);
-				rowhead.createCell(0).setCellValue("X");
-				rowhead.createCell(1).setCellValue("Y");
-				
-				int target = vista.getTarget();
-				espectro = coleccion.getEspectro(target);
 				for(int i = 0; i < espectro.getNumElem(); i++){
-					HSSFRow row = sheet.createRow((short)i);
-					row.createCell(0).setCellValue(espectro.X[i]);
-					row.createCell(1).setCellValue(espectro.Y[i]);
+					Row row = sheet.createRow(rowNum++);
+					int cellNum = 0;
+					for (int j = 0; j < 2; j++){
+						Cell cell = row.createCell(cellNum++);
+						if(j==0)
+							cell.setCellValue(espectro.X[i]);
+						else
+							cell.setCellValue(espectro.Y[i]);
+
+					}
 				}
 				
 				wb.write(fos);
@@ -187,5 +204,74 @@ public class Controlador implements ActionListener{
         	espectro.collection.addSeries(espectro.series);
         first = false;
         return espectro.collection;
+	}
+	
+	public int readElementos(){
+		File folder = new File("data/mu");
+		File[] listOfFiles = folder.listFiles();
+		int contador = 1, fila = 0;
+		String nombre, extension;
+		boolean copiar = false;
+		
+		cadena[0] = "------";
+		for(int i = 0; i < listOfFiles.length; i++){
+			nombre = listOfFiles[i].getName();
+			extension = nombre.substring(nombre.lastIndexOf(".")+1, nombre.length());
+			if (extension.equals("csv")){
+				contador++;
+				cadena[i+1] = listOfFiles[i].getName();
+				cadena[i+1] = cadena[i+1].replaceFirst("[.][^.]+$", "");
+			}
+		}
+		
+		try {
+			FileInputStream fis = new FileInputStream("data/Elementos.xlsx");
+			XSSFWorkbook wb = new XSSFWorkbook(fis);
+			XSSFSheet sheet = wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			
+			while (rowIterator.hasNext()){
+				Row row = rowIterator.next();
+				
+				Iterator<Cell> cellIterator = row.cellIterator();
+				while(cellIterator.hasNext()){
+					Cell cell = cellIterator.next();
+					if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+						for(int i = 0; i<contador;i++){
+							if(isInteger(cadena[i]))
+								if(cell.getNumericCellValue() == Integer.parseInt(cadena[i])){
+									copiar = true;
+									fila = i;
+								}
+						}
+					}
+					if(cell.getCellType() == Cell.CELL_TYPE_STRING){
+							if (copiar){
+								cadena[fila] = cell.getRichStringCellValue().getString();
+								copiar = false;
+							}
+					}
+				}
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return contador;
+	}
+	
+	public boolean isInteger(String s){
+		try{
+			Integer.parseInt(s);
+		} catch(NumberFormatException e){
+			return false;
+		} catch (NullPointerException e){
+			return false;
+		}
+		return true;
 	}
 }

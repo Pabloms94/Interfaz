@@ -1,5 +1,11 @@
 import java.io.*;
+import java.util.Iterator;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -68,9 +74,10 @@ public class Modelo {
 		double []yNew = new double [500];
 		
 		series.clear();
+		String name = getNameFile(options[0]);
 		
 		try {
-			BufferedReader in = new BufferedReader(new FileReader("data/mu/"+options[0]));
+			BufferedReader in = new BufferedReader(new FileReader("data/mu/"+name));
 			String str = in.readLine();
 			String []tok = str.split(",");
 			
@@ -136,5 +143,48 @@ public class Modelo {
 		for(int i = 0; i < numElem; i++){
 			System.out.println("X " + X[i] + " Y " +Y[i]);
 		}
+	}
+	
+	public String getNameFile(String s){
+		int fila = 0;
+		boolean salir= false;
+		XSSFSheet sheet = null;
+		System.out.println("ME LLEGA "+s);
+		try {
+			FileInputStream fis = new FileInputStream("data/Elementos.xlsx");
+			XSSFWorkbook wb = new XSSFWorkbook(fis);
+			sheet = wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			
+			while (rowIterator.hasNext()){
+				fila++;
+				Row row = rowIterator.next();
+				Iterator<Cell> cellIterator = row.cellIterator();
+				while(cellIterator.hasNext()){
+					Cell cell = cellIterator.next();
+					if(cell.getCellType() == Cell.CELL_TYPE_STRING){
+						if(cell.getStringCellValue().trim().equals(s)){
+							salir = true;
+							break;
+						}
+					}
+				}
+				if(salir)
+					break;
+			}
+			
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		CellReference ref = new CellReference(fila-1,1);
+		Row r = sheet.getRow(ref.getRow());
+		System.out.println("DEVUELVO " +String.valueOf(r.getCell(0).getNumericCellValue())+".csv");
+		return (Integer.toString((int) r.getCell(0).getNumericCellValue())+".csv");
 	}
 }

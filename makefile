@@ -24,8 +24,8 @@ dir:
 mf:
 	cp -r manifest.mf $(BUILDDIR)
 	cp -r lib $(BUILDDIR)
-	cp -r data $(BUILDDIR)
-	cp -r xpectraC.exe $(BUILDDIR)
+	cp -r ../XpectraC/data $(BUILDDIR)
+	cp -r ../XpectraC/build/xpectraC.exe $(BUILDDIR)
 	cp -r x.json $(BUILDDIR)
 	cp -r y.json $(BUILDDIR)
 	cp -r icon.png $(BUILDDIR)

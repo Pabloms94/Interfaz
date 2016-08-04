@@ -16,4 +16,5 @@ public interface Interfaz {
 	
 	int getTarget();
 	void modificarLista(int i);
+	void setElementos(String[] cadena, int contador);
 }
