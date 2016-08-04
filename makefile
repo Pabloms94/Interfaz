@@ -5,7 +5,7 @@ SOURCEDIR = src
 BUILDDIR = build
 LIBDIR = lib
 
-CLASSPATH = $(LIBDIR)/jcommon-1.0.23.jar gson-2.6.2.jar jfreechart-1.0.19.jar
+CLASSPATH = $(LIBDIR)/jcommon-1.0.23.jar gson-2.6.2.jar jfreechart-1.0.19.jar poi-3.14-20160307.jar
 
 .SUFFIXES: .java .class
 
@@ -24,6 +24,11 @@ dir:
 mf:
 	cp -r manifest.mf $(BUILDDIR)
 	cp -r lib $(BUILDDIR)
+	cp -r data $(BUILDDIR)
+	cp -r xpectraC.exe $(BUILDDIR)
+	cp -r x.json $(BUILDDIR)
+	cp -r y.json $(BUILDDIR)
+	cp -r icon.png $(BUILDDIR)
 	
 jar: classes
 	cd $(BUILDDIR) && jar -cvfm Xpectra.jar manifest.mf *.class
