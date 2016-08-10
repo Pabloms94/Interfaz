@@ -39,7 +39,7 @@ import com.google.gson.JsonPrimitive;
 
 public class Controlador implements ActionListener{
 	private Interfaz vista;
-	private static Modelo espectro;
+	private static Modelo espectro = new Modelo();
 	private ColeccionEspectros coleccion;
 	static boolean first =true;
 
@@ -47,9 +47,8 @@ public class Controlador implements ActionListener{
 	/*static XYSeriesCollection collection = new XYSeriesCollection();
 	static XYSeries series = new XYSeries("");*/
 	
-	public Controlador (Interfaz vista, Modelo modelo, ColeccionEspectros coleccion){
+	public Controlador (Interfaz vista, ColeccionEspectros coleccion){
 		this.vista = vista;
-		this.espectro = modelo;
 		this.coleccion = coleccion;
 	}
 	
@@ -58,7 +57,6 @@ public class Controlador implements ActionListener{
 				
 		if (arg0.getActionCommand().equals("ENTER1")){
 			double []data = vista.getData();
-			espectro.setValor(data);
 			vista.writeData("Me ha llegado: " + data[0] + " " + data[1] + " " + data[2] + " " + data[3] + " " + data[4]);
 			
 			Runtime rt = Runtime.getRuntime();
@@ -94,15 +92,18 @@ public class Controlador implements ActionListener{
 				e.printStackTrace();
 			}
 			
-		}else if (arg0.getActionCommand().equals("ENTER2")){
+		}else if (arg0.getActionCommand().equals("ATENUAR")){
         	String []options = vista.getOptions();
         	
         	if(options[0] != "------" && !options[1].isEmpty()){
         		espectro.setOptions(options);
-        	
         		espectro.Atenuar();
-        	
         		coleccion.setEspectro(espectro);
+        	
+        		for (int j = 0; j < coleccion.getIndice(); j++){
+        			System.out.println("ESPECTRO " + j);
+        			coleccion.getEspectro(j).imprimir();}
+        		
         		vista.graphics(coleccion.getDataset(), options[0], options[1], coleccion.getIndice()-1);  
         	}
         	
@@ -112,15 +113,15 @@ public class Controlador implements ActionListener{
 
 			if(coleccion.getIndice()-1 > target){
 				coleccion.revert(target);
-				String []options = coleccion.getOptions(target);
+				String []options = coleccion.getOptions();
         	
 				System.out.println("PINTAR TARGET " + target + " E INDICE " + coleccion.getIndice());
 				System.out.println("OPCIONES " + options[0] + " " + options[1]);
 				
 				vista.modificarLista(target);
-				espectro = coleccion.getEspectro(target);
-				espectro.imprimir();
-				vista.graphics(espectro.getDataset1(), options[0], options[1], target);  
+				//Modelo mostrar = new Modelo(coleccion.getEspectro(coleccion.getIndice());
+				//mostrar.imprimir();
+				//vista.graphics(mostrar.getDataset1(), options[0], options[1], target);  
 			}
         	      	
 		}else if (arg0.getActionCommand().equals("exportar")){

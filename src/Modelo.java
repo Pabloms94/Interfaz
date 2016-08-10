@@ -11,8 +11,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 public class Modelo {
-
-	private double[] valor; //valores recogidos de la interfaz
+	
 	private String[] options;
 	private XYDataset dataset1;
 	private int numElem;
@@ -21,12 +20,27 @@ public class Modelo {
 	XYSeriesCollection collection = new XYSeriesCollection();
 	XYSeries series = new XYSeries("");
 	
-	public double[] getValor() {
-		return valor;
+	public Modelo(){
+		
+	}	
+	
+	public Modelo (XYDataset dataset1, int numElem, double[] X, double[] Y, String[] options,XYSeriesCollection collection, XYSeries series){
+		this.dataset1 = dataset1;
+		this.numElem = numElem;
+		this.X = X;
+		this.Y = Y;
+		this.options = options;
+		this.collection = collection;
+		this.series = series;
 	}
-
-	public void setValor(double[] valor) {
-		this.valor = valor;
+	
+	public Modelo (XYDataset dataset1, int numElem, double[] X, double[] Y, XYSeriesCollection collection, XYSeries series){
+		this.dataset1 = dataset1;
+		this.numElem = numElem;
+		this.X = X;
+		this.Y = Y;
+		this.collection = collection;
+		this.series = series;
 	}
 
     public String[] getOptions() {
@@ -58,7 +72,7 @@ public class Modelo {
 	}
 
 	public void setX(double[] x) {
-		X = x;
+		this.X = x;
 	}
 
 	public double[] getY() {
@@ -66,7 +80,19 @@ public class Modelo {
 	}
 
 	public void setY(double[] y) {
-		Y = y;
+		this.Y = y;
+	}
+	
+	public XYSeriesCollection getCollection() {
+		return collection;
+	}
+
+	public void setCollection(XYSeriesCollection collection) {
+		this.collection = collection;
+	}
+	
+	public XYSeries getSeries() {
+		return series;
 	}
 	
 	public void Atenuar(){
@@ -91,7 +117,7 @@ public class Modelo {
 				yNew[i] = Double.parseDouble(tok[i]);
 
 			for(int i = 0; i < numElem; i++){
-				Y[i] = (Y[i] * Math.exp ( (interpolar1DLogLog(X[i], xNew, yNew, numElem))* Double.parseDouble(options[1]) * (-1)));
+				this.Y[i] = (Y[i] * Math.exp ( (interpolar1DLogLog(X[i], xNew, yNew, numElem))* Double.parseDouble(options[1]) * (-1)));
 				series.addOrUpdate(X[i], Y[i]);
 			}
 			//collection.addSeries(series);
@@ -149,7 +175,6 @@ public class Modelo {
 		int fila = 0;
 		boolean salir= false;
 		XSSFSheet sheet = null;
-		System.out.println("ME LLEGA "+s);
 		try {
 			FileInputStream fis = new FileInputStream("data/Elementos.xlsx");
 			XSSFWorkbook wb = new XSSFWorkbook(fis);
@@ -184,7 +209,6 @@ public class Modelo {
 		
 		CellReference ref = new CellReference(fila-1,1);
 		Row r = sheet.getRow(ref.getRow());
-		System.out.println("DEVUELVO " +String.valueOf(r.getCell(0).getNumericCellValue())+".csv");
 		return (Integer.toString((int) r.getCell(0).getNumericCellValue())+".csv");
 	}
 }

@@ -295,7 +295,7 @@ public class Vista extends JFrame implements Interfaz{
 		
 		btnAtenuar = new JButton("Atenuar");
 		btnAtenuar.setEnabled(false);
-		btnAtenuar.setActionCommand("ENTER2");
+		btnAtenuar.setActionCommand("ATENUAR");
 		GridBagConstraints constraints17 = new GridBagConstraints();
 		constraints17.insets = new Insets(0, 0, 5, 0);
 		constraints17.fill = GridBagConstraints.CENTER;
@@ -446,7 +446,11 @@ public class Vista extends JFrame implements Interfaz{
 		int lim = listaModelo.size();
 
 		for (int j = i+1; j <= lim; j++){
-			listaModelo.remove(i+1);
+			try {
+				listaModelo.remove(i+1);
+			} catch (ArrayIndexOutOfBoundsException e){
+				System.out.println("");
+			}
 		}
 		lista.setSelectedIndex(i);
 	}

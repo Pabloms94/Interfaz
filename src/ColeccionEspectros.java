@@ -1,7 +1,9 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -11,8 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jfree.data.xy.XYDataset;
 
 public class ColeccionEspectros {
-	private int TAM = 100;
-	private Modelo[] listaEspectros = new Modelo[TAM];
+	private List<Modelo> listaEspectros = new ArrayList<Modelo>();
 	private int indice = 0;
 	
 	public int getIndice() {
@@ -21,13 +22,13 @@ public class ColeccionEspectros {
 		return indice;
 	}
 
-	public Modelo[] getListaEspectros() {
+	public List<Modelo> getListaEspectros() {
 		System.out.println("GLESPECTRO");
 
 		return listaEspectros;
 	}
 
-	public void setListaEspectros(Modelo[] listaEspectros) {
+	public void setListaEspectros(List<Modelo> listaEspectros) {
 		System.out.println("SLESPECTRO");
 
 		this.listaEspectros = listaEspectros;
@@ -36,46 +37,35 @@ public class ColeccionEspectros {
 	public Modelo getEspectro(int i) {
 		System.out.println("GESPECTRO");
 
-		return listaEspectros[i];
+		return listaEspectros.get(i);
 	}
 
-	public void setEspectro(Modelo espectro) {
-		System.out.println("ANTES");
-
-		for (int j = 0; j < indice; j++){
-			System.out.println("ESPECTRO " + j);
-			for(int i = 0; i < listaEspectros[j].getNumElem(); i++)
-				System.out.println("X " + listaEspectros[j].X[i] + " Y " + listaEspectros[j].Y[i]);
-			}
-		this.listaEspectros[indice] = espectro;
+	public void setEspectro(Modelo m) {
+		Modelo newEspectro = new Modelo(m.getDataset1(), m.getNumElem(), m.getX(), m.getY(), m.collection, m.series);
+		newEspectro.setOptions(m.getOptions());
+		this.listaEspectros.add(newEspectro);
 		indice++;
-		System.out.println("DESPUES");
-		
-		for (int j = 0; j < indice; j++){
-			System.out.println("ESPECTRO " + j);
-			for(int i = 0; i < listaEspectros[j].getNumElem(); i++)
-				System.out.println("X " + listaEspectros[j].X[i] + " Y " + listaEspectros[j].Y[i]);
-			}
 	}
 	
-	public XYDataset getDataset() {		System.out.println("DATA");
+	public XYDataset getDataset() {		
+		System.out.println("DATA");
 
-		return listaEspectros[indice-1].getDataset1();
+		return listaEspectros.get(indice-1).getDataset1();
 	}
 	
 	public void revert(int i){
 		System.out.println("REVERT");
 
-		for(int j = i+1;j<TAM; j++)
-			listaEspectros[j] = null;
+		for(int j = i+1;j<listaEspectros.size(); j++)
+			listaEspectros.remove(j);
 		indice = i+1;
 		
 		System.out.println("HAY " + indice + " espectros");
 	}
 	
-	public String[] getOptions(int i){
+	public String[] getOptions(){
 		System.out.println("OPCIONES");
 
-		return listaEspectros[i].getOptions();
+		return listaEspectros.get(indice-1).getOptions();
 	}	
 }
