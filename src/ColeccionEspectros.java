@@ -17,55 +17,52 @@ public class ColeccionEspectros {
 	private int indice = 0;
 	
 	public int getIndice() {
-		System.out.println("INDICe");
-
 		return indice;
 	}
 
 	public List<Modelo> getListaEspectros() {
-		System.out.println("GLESPECTRO");
-
 		return listaEspectros;
 	}
 
 	public void setListaEspectros(List<Modelo> listaEspectros) {
-		System.out.println("SLESPECTRO");
-
 		this.listaEspectros = listaEspectros;
 	}
 
 	public Modelo getEspectro(int i) {
-		System.out.println("GESPECTRO");
-
+		System.out.println("COGE ESPECTRO "+i);
 		return listaEspectros.get(i);
 	}
 
 	public void setEspectro(Modelo m) {
-		Modelo newEspectro = new Modelo(m.getDataset1(), m.getNumElem(), m.getX(), m.getY(), m.collection, m.series);
+		Modelo newEspectro = new Modelo(m.getNumElem(), m.getX(), m.getY());
 		newEspectro.setOptions(m.getOptions());
 		this.listaEspectros.add(newEspectro);
+		
+		System.out.println("TRAS CADA SET");
+		for(int i = 0; i< newEspectro.getNumElem(); i++){
+			
+			System.out.println("X " + newEspectro.X[i]+ " Y "+newEspectro.Y[i]);
+		}
 		indice++;
 	}
 	
-	public XYDataset getDataset() {		
-		System.out.println("DATA");
-
+	/*public XYDataset getDataset() {	
 		return listaEspectros.get(indice-1).getDataset1();
-	}
+	}*/
 	
 	public void revert(int i){
-		System.out.println("REVERT");
-
-		for(int j = i+1;j<listaEspectros.size(); j++)
-			listaEspectros.remove(j);
+		if (i == -1){
+			listaEspectros.clear();
+		}else{
+			for(int j = i+1;j<listaEspectros.size(); j++)
+				listaEspectros.remove(j);
+		}
 		indice = i+1;
 		
-		System.out.println("HAY " + indice + " espectros");
+		System.out.println("QUEDAN "+indice+" ELEMENTOS");
 	}
 	
 	public String[] getOptions(){
-		System.out.println("OPCIONES");
-
 		return listaEspectros.get(indice-1).getOptions();
 	}	
 }

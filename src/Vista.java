@@ -358,7 +358,7 @@ public class Vista extends JFrame implements Interfaz{
 	}
 	
 	public void graphics(XYDataset dataset1, String opt1, String opt2, int i){
-		JFreeChart chart = ChartFactory.createScatterPlot("Titulo", "X", "Y", dataset1);
+		JFreeChart chart = ChartFactory.createScatterPlot("Espectro", "X", "Y", dataset1);
 		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 		renderer.setDrawSeriesLineAsPath(true);
 		XYPlot plot = (XYPlot)chart.getPlot();
@@ -382,7 +382,6 @@ public class Vista extends JFrame implements Interfaz{
 			first =true;
 		}
 			
-		
 		if(first){
 			listaModelo.removeAllElements();
 			listaModelo.addElement("Original");
@@ -407,9 +406,9 @@ public class Vista extends JFrame implements Interfaz{
 	public void showHelp(){
 		String longMessage = "X-pectra implementa modelos de fuentes de rayos X.\n"
 			    + "La primera pestaña nos permite introducir datos:\n"
-			    + "\tE0: \n"
-			    + "\tTheta: \n"
-			    + "\tPhi: \n"
+			    + "\tE0: energía con la que el haz de electrones penetra el ánodo de tungsteno.\n"
+			    + "\tTheta: dirección de los fotones emitidos con energía Ey\n"
+			    + "\tPhi: ángulo de elevación sobre el plano.\n"
 			    + "\tE_min: será el primer valor para el que se calculará la función.\n"
 			    + "\tE_intervalo: se recorrerá desde E_min hasta E0 en intervalos de la cantidad indicada en este campo.\n\n"
 			    + "La segunda pestaña será la que nos represente gráficamente los resultados.\n"

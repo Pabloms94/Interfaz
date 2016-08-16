@@ -13,36 +13,38 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class Modelo {
 	
 	private String[] options;
-	private XYDataset dataset1;
+	//private XYDataset dataset1;
 	private int numElem;
 	double []X = null;
 	double []Y = null;
-	XYSeriesCollection collection = new XYSeriesCollection();
-	XYSeries series = new XYSeries("");
+	/*XYSeriesCollection collection = new XYSeriesCollection();
+	XYSeries series = new XYSeries("");*/
+	boolean first = true;
 	
 	public Modelo(){
 		
 	}	
 	
-	public Modelo (XYDataset dataset1, int numElem, double[] X, double[] Y, String[] options,XYSeriesCollection collection, XYSeries series){
-		this.dataset1 = dataset1;
+	public Modelo (int numElem, double[] X, double[] Y){
 		this.numElem = numElem;
-		this.X = X;
-		this.Y = Y;
-		this.options = options;
-		this.collection = collection;
-		this.series = series;
-	}
-	
-	public Modelo (XYDataset dataset1, int numElem, double[] X, double[] Y, XYSeriesCollection collection, XYSeries series){
-		this.dataset1 = dataset1;
-		this.numElem = numElem;
-		this.X = X;
-		this.Y = Y;
-		this.collection = collection;
-		this.series = series;
+		this.X = X.clone();
+		this.Y = Y.clone();
 	}
 
+	/*public Modelo (int numElem, double[] X, double[] Y, XYSeries series){
+		this.numElem = numElem;
+		this.X = X.clone();
+		this.Y = Y.clone();
+		try {
+			this.series = (XYSeries) series.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.collection.addSeries(series);
+		this.dataset1 = this.collection;
+	}*/
+	
     public String[] getOptions() {
 		return options;
 	}
@@ -51,13 +53,13 @@ public class Modelo {
 		this.options = options;
 	}
 	
-	public XYDataset getDataset1() {
+	/*public XYDataset getDataset1() {
 		return dataset1;
 	}
 
 	public void setDataset1(XYDataset dataset1) {
 		this.dataset1 = dataset1;
-	}
+	}*/
 
 	public int getNumElem() {
 		return numElem;
@@ -83,7 +85,7 @@ public class Modelo {
 		this.Y = y;
 	}
 	
-	public XYSeriesCollection getCollection() {
+	/*public XYSeriesCollection getCollection() {
 		return collection;
 	}
 
@@ -93,13 +95,13 @@ public class Modelo {
 	
 	public XYSeries getSeries() {
 		return series;
-	}
+	}*/
 	
 	public void Atenuar(){
 		double []xNew = new double [500];
 		double []yNew = new double [500];
 		
-		series.clear();
+		//series.clear();
 		String name = getNameFile(options[0]);
 		
 		try {
@@ -117,8 +119,8 @@ public class Modelo {
 				yNew[i] = Double.parseDouble(tok[i]);
 
 			for(int i = 0; i < numElem; i++){
-				this.Y[i] = (Y[i] * Math.exp ( (interpolar1DLogLog(X[i], xNew, yNew, numElem))* Double.parseDouble(options[1]) * (-1)));
-				series.addOrUpdate(X[i], Y[i]);
+				Y[i] = (Y[i] * Math.exp ( (interpolar1DLogLog(X[i], xNew, yNew, numElem))* Double.parseDouble(options[1]) * (-1)));
+				//series.addOrUpdate(X[i], Y[i]);
 			}
 			//collection.addSeries(series);
 			//setDataset1(collection);
@@ -211,4 +213,9 @@ public class Modelo {
 		Row r = sheet.getRow(ref.getRow());
 		return (Integer.toString((int) r.getCell(0).getNumericCellValue())+".csv");
 	}
+	
+	/*public void actualizar(){
+		for(int i = 0; i < numElem; i++)
+			series.addOrUpdate(X[i], Y[i]);
+	}*/
 }
