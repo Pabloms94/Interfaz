@@ -5,7 +5,7 @@ SOURCEDIR = src
 BUILDDIR = build
 LIBDIR = lib
 
-CLASSPATH = $(LIBDIR)/jcommon-1.0.23.jar gson-2.6.2.jar jfreechart-1.0.19.jar poi-3.14-20160307.jar
+CLASSPATH = $(LIBDIR)/jcommon-1.0.23.jar gson-2.6.2.jar jfreechart-1.0.19.jar poi-3.14-20160307.jar poi-ooxml-3.14-20160307.jar poi-ooxml-schemas-3.14-20160307.jar xmlbeans-2.6.0.jar
 
 .SUFFIXES: .java .class
 
@@ -37,4 +37,4 @@ clean:
 	$(RM) build/*.class
 
 .PHONY: 
-	jar dir mf
+	jar dir m-f
