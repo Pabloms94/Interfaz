@@ -76,7 +76,6 @@ public class Controlador implements ActionListener {
 				}
 
 				pr.waitFor();
-				System.out.println("Recibo: " + pr.exitValue());
 
 				if (pr.exitValue() == 0) {
 					try {
@@ -105,12 +104,6 @@ public class Controlador implements ActionListener {
 						coleccion.getEspectro(coleccion.getIndice() - 1).getY());
 				newEspectro.setOptions(options);
 
-				System.out.println("VAMOS A ATENUAR QUE TIENE DE INDICE " + coleccion.getIndice());
-				for (int i = 0; i < newEspectro.getNumElem(); i++) {
-
-					System.out.println("X " + newEspectro.X[i] + " Y " + newEspectro.Y[i]);
-				}
-
 				newEspectro.Atenuar();
 				series.clear();
 				for (int i = 0; i < newEspectro.getNumElem(); i++) {
@@ -129,9 +122,6 @@ public class Controlador implements ActionListener {
 				coleccion.revert(target);
 				String[] options = coleccion.getOptions();
 
-				System.out.println("PINTAR TARGET " + target + " E INDICE " + coleccion.getIndice());
-				System.out.println("OPCIONES " + options[0] + " " + options[1]);
-
 				vista.modificarLista(target);
 				Modelo mostrar = new Modelo(coleccion.getEspectro(target).getNumElem(),
 						coleccion.getEspectro(target).getX(), coleccion.getEspectro(target).getY());
@@ -139,15 +129,12 @@ public class Controlador implements ActionListener {
 				series.clear();
 				for (int i = 0; i < mostrar.getNumElem(); i++) {
 					series.addOrUpdate(mostrar.X[i], mostrar.Y[i]);
-					System.out.println("X " + series.getX(i) + " Y " + series.getY(i));
 				}
 
 				vista.graphics(dataset1, options[0], options[1], target);
 			} else if (coleccion.getIndice() - 1 > target && target == 0) {
 				coleccion.revert(target);
 
-				System.out.println("PINTAR TARGET " + target + " E INDICE " + coleccion.getIndice());
-
 				vista.modificarLista(target);
 				Modelo mostrar = new Modelo(coleccion.getEspectro(target).getNumElem(),
 						coleccion.getEspectro(target).getX(), coleccion.getEspectro(target).getY());
@@ -155,7 +142,6 @@ public class Controlador implements ActionListener {
 				series.clear();
 				for (int i = 0; i < mostrar.getNumElem(); i++) {
 					series.addOrUpdate(mostrar.X[i], mostrar.Y[i]);
-					System.out.println("X " + series.getX(i) + " Y " + series.getY(i));
 				}
 
 				vista.graphics(dataset1, "", "", target);
@@ -255,7 +241,6 @@ public class Controlador implements ActionListener {
 			collection.addSeries(series);
 		else {
 			coleccion.revert(-1);
-			System.out.println("BORRADO");
 		}
 		first = false;
 		return collection;

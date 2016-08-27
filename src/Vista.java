@@ -87,10 +87,11 @@ public class Vista extends JFrame implements Interfaz {
 		programa.add(salir);
 		ayuda.add(ayudaGral);
 		ayuda.add(acercaDe);
-		exportar.setActionCommand("exportar");
-		salir.setActionCommand("salir");
-		ayudaGral.setActionCommand("ayudaGral");
-		acercaDe.setActionCommand("acercaDe");
+		exportar.setActionCommand("EXPORTAR");
+		exportar.setEnabled(false);
+		salir.setActionCommand("SALIR");
+		ayudaGral.setActionCommand("AYUDAGRAL");
+		acercaDe.setActionCommand("ACERCADE");
 		exportar.setEnabled(false);
 
 		tabs = new JTabbedPane();
@@ -250,7 +251,7 @@ public class Vista extends JFrame implements Interfaz {
 		panel1.add(lblResultado, constraints11);
 
 		GridBagConstraints constraints12 = new GridBagConstraints();
-		btnOk = new JButton("OK");
+		btnOk = new JButton("Calcular");
 		btnOk.setActionCommand("ENTER1");
 		constraints12.fill = GridBagConstraints.CENTER;
 		constraints12.gridx = 0;
@@ -406,6 +407,7 @@ public class Vista extends JFrame implements Interfaz {
 		textField.setEnabled(true);
 		btnAtenuar.setEnabled(true);
 		btnRevertir.setEnabled(true);
+		exportar.setEnabled(true);
 
 		if (opt1.isEmpty() && opt2.isEmpty()) {
 			first = true;
@@ -424,8 +426,8 @@ public class Vista extends JFrame implements Interfaz {
 	}
 
 	/**
-	 * @function getOptions recupera las opciones introducidas para un espectro
-	 *           de la lista.
+	 * @function getOptions recoge las opciones introducidas para un espectro
+	 *           cuando se quiere atenuar.
 	 */
 	public String[] getOptions() {
 		String[] options = { null, null };

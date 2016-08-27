@@ -26,7 +26,6 @@ public class ColeccionEspectros {
 	}
 
 	public Modelo getEspectro(int i) {
-		System.out.println("COGE ESPECTRO " + i);
 		return listaEspectros.get(i);
 	}
 
@@ -40,12 +39,6 @@ public class ColeccionEspectros {
 		Modelo newEspectro = new Modelo(m.getNumElem(), m.getX(), m.getY());
 		newEspectro.setOptions(m.getOptions());
 		this.listaEspectros.add(newEspectro);
-
-		System.out.println("TRAS CADA SET");
-		for (int i = 0; i < newEspectro.getNumElem(); i++) {
-
-			System.out.println("X " + newEspectro.X[i] + " Y " + newEspectro.Y[i]);
-		}
 		indice++;
 	}
 
@@ -63,7 +56,5 @@ public class ColeccionEspectros {
 				listaEspectros.remove(j);
 		}
 		indice = i + 1;
-
-		System.out.println("QUEDAN " + indice + " ELEMENTOS");
 	}
 }
