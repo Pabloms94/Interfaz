@@ -92,7 +92,6 @@ public class Vista extends JFrame implements Interfaz {
 		salir.setActionCommand("SALIR");
 		ayudaGral.setActionCommand("AYUDAGRAL");
 		acercaDe.setActionCommand("ACERCADE");
-		exportar.setEnabled(false);
 
 		tabs = new JTabbedPane();
 		tabs.addTab("Datos", panel1);
@@ -421,7 +420,6 @@ public class Vista extends JFrame implements Interfaz {
 
 		first = false;
 		lista.setSelectedIndex(i);
-		exportar.setEnabled(true);
 		tabs.setSelectedIndex(1);
 	}
 
