@@ -59,9 +59,7 @@ public class Controlador implements ActionListener {
 		 */
 		if (arg0.getActionCommand().equals("ENTER1")) {
 			double[] data = vista.getData();
-			vista.writeData(
-					"Me ha llegado: " + data[0] + " " + data[1] + " " + data[2] + " " + data[3] + " " + data[4]);
-
+			
 			Runtime rt = Runtime.getRuntime();
 			try {
 				Process pr = rt.exec(new String[] { "xpectraC.exe", String.valueOf(data[0]), String.valueOf(data[1]),
@@ -131,7 +129,7 @@ public class Controlador implements ActionListener {
 					series.addOrUpdate(mostrar.X[i], mostrar.Y[i]);
 				}
 
-				vista.graphics(dataset1, options[0], options[1], target);
+				vista.graphics(dataset1, "revert", options[1], target);
 			} else if (coleccion.getIndice() - 1 > target && target == 0) {
 				coleccion.revert(target);
 
@@ -149,27 +147,36 @@ public class Controlador implements ActionListener {
 
 		} else if (arg0.getActionCommand().equals("EXPORTAR")) {
 			try {
-				FileOutputStream fos = new FileOutputStream("Resultado.xlsx");
-				XSSFWorkbook wb = new XSSFWorkbook();
-				XSSFSheet sheet = wb.createSheet("Primera hoja");
-
-				int rowNum = sheet.getLastRowNum();
-
-				for (int i = 0; i < espectro.getNumElem(); i++) {
-					Row row = sheet.createRow(rowNum++);
-					int cellNum = 0;
-					for (int j = 0; j < 2; j++) {
-						Cell cell = row.createCell(cellNum++);
-						if (j == 0)
-							cell.setCellValue(espectro.X[i]);
-						else
-							cell.setCellValue(espectro.Y[i]);
-
+				int target = vista.getTarget();
+				String[] fichero = new String[2];
+				fichero = vista.save();
+				
+				if(!(fichero[0].equals("cancel")) && !(fichero[1].equals("cancel"))){
+					FileOutputStream fos = new FileOutputStream(fichero[1]+"\\"+fichero[0]+".xlsx");
+					XSSFWorkbook wb = new XSSFWorkbook();
+					XSSFSheet sheet = wb.createSheet("Primera hoja");
+					
+					Modelo mostrar = new Modelo(coleccion.getEspectro(target).getNumElem(),
+							coleccion.getEspectro(target).getX(), coleccion.getEspectro(target).getY());
+					
+					int rowNum = sheet.getLastRowNum();
+	
+					for (int i = 0; i < mostrar.getNumElem(); i++) {
+						Row row = sheet.createRow(rowNum++);
+						int cellNum = 0;
+						for (int j = 0; j < 2; j++) {
+							Cell cell = row.createCell(cellNum++);
+							if (j == 0)
+								cell.setCellValue(mostrar.X[i]);
+							else
+								cell.setCellValue(mostrar.Y[i]);
+	
+						}
 					}
+	
+					wb.write(fos);
+					fos.close();
 				}
-
-				wb.write(fos);
-				fos.close();
 
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block

@@ -23,4 +23,6 @@ public interface Interfaz {
 	void modificarLista(int i);
 
 	void setElementos(String[] cadena, int contador);
+	
+	String[] save();
 }

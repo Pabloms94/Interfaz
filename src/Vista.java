@@ -20,9 +20,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import java.awt.Component;
 import java.awt.Font;
 
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -36,6 +39,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 
 public class Vista extends JFrame implements Interfaz {
 	private JTextField e0;
@@ -78,7 +82,7 @@ public class Vista extends JFrame implements Interfaz {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ImageIcon img = new ImageIcon("icon.png");
 		setIconImage(img.getImage());
-
+		
 		setJMenuBar(menu);
 		menu.add(programa);
 		menu.add(ayuda);
@@ -128,7 +132,7 @@ public class Vista extends JFrame implements Interfaz {
 		panel1.add(tittle, constraints);
 
 		GridBagConstraints constraints1 = new GridBagConstraints();
-		JLabel lblE0 = new JLabel("E0");
+		JLabel lblE0 = new JLabel("E0 (keV)");
 		lblE0.setHorizontalAlignment(SwingConstants.CENTER);
 		constraints1.fill = GridBagConstraints.BOTH;
 		constraints1.gridx = 0;
@@ -138,7 +142,7 @@ public class Vista extends JFrame implements Interfaz {
 		panel1.add(lblE0, constraints1);
 
 		GridBagConstraints constraints2 = new GridBagConstraints();
-		JLabel lblEmin = new JLabel("E_min");
+		JLabel lblEmin = new JLabel("E_min (keV)");
 		lblEmin.setHorizontalAlignment(SwingConstants.CENTER);
 		constraints2.fill = GridBagConstraints.BOTH;
 		constraints2.gridx = 1;
@@ -172,7 +176,7 @@ public class Vista extends JFrame implements Interfaz {
 		panel1.add(e_min, constraints4);
 
 		GridBagConstraints constraints5 = new GridBagConstraints();
-		JLabel lblTheta = new JLabel("Theta");
+		JLabel lblTheta = new JLabel("Theta (º)");
 		lblTheta.setHorizontalAlignment(SwingConstants.CENTER);
 		constraints5.fill = GridBagConstraints.BOTH;
 		constraints5.gridx = 0;
@@ -182,7 +186,7 @@ public class Vista extends JFrame implements Interfaz {
 		panel1.add(lblTheta, constraints5);
 
 		GridBagConstraints constraints6 = new GridBagConstraints();
-		JLabel lblEinterval = new JLabel("E_intervalo");
+		JLabel lblEinterval = new JLabel("E_intervalo (keV)");
 		lblEinterval.setHorizontalAlignment(SwingConstants.CENTER);
 		constraints6.fill = GridBagConstraints.BOTH;
 		constraints6.insets = new Insets(0, 0, 5, 0);
@@ -217,7 +221,7 @@ public class Vista extends JFrame implements Interfaz {
 		panel1.add(e_intervalo, constraints8);
 
 		GridBagConstraints constraints9 = new GridBagConstraints();
-		JLabel lblPhi = new JLabel("Phi");
+		JLabel lblPhi = new JLabel("Phi (º)");
 		lblPhi.setHorizontalAlignment(SwingConstants.CENTER);
 		constraints9.fill = GridBagConstraints.BOTH;
 		constraints9.gridx = 0;
@@ -261,7 +265,7 @@ public class Vista extends JFrame implements Interfaz {
 
 		GridBagConstraints constraints13 = new GridBagConstraints();
 		constraints13.insets = new Insets(0, 0, 5, 0);
-		JLabel lbl = new JLabel("Elija:");
+		JLabel lbl = new JLabel("Material atenuante:");
 		constraints13.gridx = 0;
 		constraints13.gridy = 2;
 		panel2.add(lbl, constraints13);
@@ -277,7 +281,7 @@ public class Vista extends JFrame implements Interfaz {
 		comboBox.setEnabled(false);
 		panel2.add(comboBox, constraints14);
 
-		JLabel lblEspesor = new JLabel("Espesor:");
+		JLabel lblEspesor = new JLabel("Espesor (cm)");
 		GridBagConstraints constraints15 = new GridBagConstraints();
 		constraints15.insets = new Insets(0, 0, 5, 0);
 		constraints15.gridx = 0;
@@ -309,13 +313,12 @@ public class Vista extends JFrame implements Interfaz {
 		constraints18.gridx = 0;
 		constraints18.gridy = 0;
 		panel2.add(jsp, constraints18);
-
-		btnRevertir = new JButton("Revertir a la seleccion");
+		
+		btnRevertir = new JButton("Revertir");
 		btnRevertir.setEnabled(false);
 		btnRevertir.setActionCommand("REVERTIR");
 		GridBagConstraints constraints19 = new GridBagConstraints();
 		constraints19.insets = new Insets(0, 0, 5, 0);
-		constraints19.fill = GridBagConstraints.CENTER;
 		constraints19.gridx = 0;
 		constraints19.gridy = 1;
 		panel2.add(btnRevertir, constraints19);
@@ -387,7 +390,7 @@ public class Vista extends JFrame implements Interfaz {
 	 *            espectros.
 	 */
 	public void graphics(XYDataset dataset1, String opt1, String opt2, int i) {
-		JFreeChart chart = ChartFactory.createScatterPlot("Espectro", "X", "Y", dataset1);
+		JFreeChart chart = ChartFactory.createScatterPlot("Espectro", "Energía (keV)", "Densidad (1/keV)", dataset1);
 		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 		renderer.setDrawSeriesLineAsPath(true);
 		XYPlot plot = (XYPlot) chart.getPlot();
@@ -415,7 +418,7 @@ public class Vista extends JFrame implements Interfaz {
 		if (first) {
 			listaModelo.removeAllElements();
 			listaModelo.addElement("Original");
-		} else
+		} else if(!(opt1.equals("revert")))
 			listaModelo.addElement("Atenuado: " + opt2 + "cm de " + opt1);
 
 		first = false;
@@ -449,7 +452,7 @@ public class Vista extends JFrame implements Interfaz {
 				+ "\tE_intervalo: se recorrerá desde E_min hasta E0 en intervalos de la cantidad indicada en este campo.\n\n"
 				+ "La segunda pestaña será la que nos represente gráficamente los resultados.\n"
 				+ "Podremos atenuar los resultados seleccionando el archivo mu y un valor de atenuación deseados.\n\n"
-				+ "Si queremos exportar los datos a un fichero .csv podremos hacerlo desde el menú programa, y la opción exportar.\n";
+				+ "Si queremos exportar los datos a un fichero .xlsx podremos hacerlo desde el menú programa, y la opción exportar.\n";
 		JTextArea textArea = new JTextArea(15, 40);
 		textArea.setText(longMessage);
 		textArea.setEditable(false);
@@ -513,5 +516,23 @@ public class Vista extends JFrame implements Interfaz {
 			mostrar[i] = cadena[i];
 
 		comboBox.setModel(new DefaultComboBoxModel<String>(mostrar));
+	}
+	
+	public String[] save(){
+		JTextField fileName = new JTextField(), dir = new JTextField();
+		String[] fichero = new String[2];
+		
+		JFileChooser c = new JFileChooser();
+		
+		int rVal = c.showSaveDialog(Vista.this);
+		if(rVal == JFileChooser.APPROVE_OPTION){
+			fichero[0] = c.getSelectedFile().getName();
+			fichero[1] = c.getCurrentDirectory().toString();
+		}else if(rVal == JFileChooser.CANCEL_OPTION){
+			fichero[0] = "cancel";
+			fichero[1] = "cancel";
+		}
+		
+		return fichero;
 	}
 }
