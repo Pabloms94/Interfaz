@@ -62,9 +62,14 @@ public class Controlador implements ActionListener {
 			
 			Runtime rt = Runtime.getRuntime();
 			try {
-				Process pr = rt.exec(new String[] { "xpectraC.exe", String.valueOf(data[0]), String.valueOf(data[1]),
+				Process pr;
+				if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0)
+					pr = rt.exec(new String[] { "xpectraC.exe", String.valueOf(data[0]), String.valueOf(data[1]),
 						String.valueOf(data[2]), String.valueOf(data[3]), String.valueOf(data[4]) });
-
+				else 
+					pr = rt.exec(new String[] { "./xpectraC.exe", String.valueOf(data[0]), String.valueOf(data[1]),
+							String.valueOf(data[2]), String.valueOf(data[3]), String.valueOf(data[4]) });
+				
 				BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 
 				String line = null;
@@ -150,9 +155,13 @@ public class Controlador implements ActionListener {
 				int target = vista.getTarget();
 				String[] fichero = new String[2];
 				fichero = vista.save();
+				FileOutputStream fos;
 				
 				if(!(fichero[0].equals("cancel")) && !(fichero[1].equals("cancel"))){
-					FileOutputStream fos = new FileOutputStream(fichero[1]+"\\"+fichero[0]+".xlsx");
+					if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0)
+						fos = new FileOutputStream(fichero[1]+"\\"+fichero[0]+".xlsx");
+					else 
+						fos = new FileOutputStream(fichero[1]+"/"+fichero[0]+".xlsx");
 					XSSFWorkbook wb = new XSSFWorkbook();
 					XSSFSheet sheet = wb.createSheet("Primera hoja");
 					
