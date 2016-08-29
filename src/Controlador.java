@@ -67,7 +67,7 @@ public class Controlador implements ActionListener {
 					pr = rt.exec(new String[] { "xpectraC.exe", String.valueOf(data[0]), String.valueOf(data[1]),
 						String.valueOf(data[2]), String.valueOf(data[3]), String.valueOf(data[4]) });
 				else 
-					pr = rt.exec(new String[] { "./xpectraC.exe", String.valueOf(data[0]), String.valueOf(data[1]),
+					pr = rt.exec(new String[] { "./xpectraC", String.valueOf(data[0]), String.valueOf(data[1]),
 							String.valueOf(data[2]), String.valueOf(data[3]), String.valueOf(data[4]) });
 				
 				BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
